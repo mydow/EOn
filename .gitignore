@@ -1,0 +1,3 @@
+# exclude thes files
+*.txt
+*.beam
