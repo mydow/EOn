@@ -7,3 +7,5 @@ strid.erl används för strid, här laddas träff och skade tabeller samt
 funktioner för att söka i dessa.
 
 karaktär.erl här finns alla tabeller för att skapa en karaktär.
+
+.gitignore innehåller excluderade filer
