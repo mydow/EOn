@@ -9,7 +9,7 @@
 
 -export([start/0,insert/1,insertlist/1,close/1,remove/1,
 	 print_record/0,get_record/0,save/1,save_as/1,
-	 load/1,import/1,new/1]).
+	 load/1,import/1,new/1,search/1]).
 
 -export([file2list/1,remove_last/2,autosave/1]).
 
@@ -35,6 +35,9 @@ insertlist(List)->
 
 remove(Object)->
     gen_server:cast(?MODULE,{remove,Object}).
+
+search(Table)->
+    gen_server:call(?MODULE,{search,Table}).
 
 save(Filename)->
     gen_server:cast(?MODULE,{save,Filename}).
@@ -116,7 +119,11 @@ handle_cast({print_record},Server) ->
     io:format("filename: ~p.~n",[Server#server.filename]),
     {noreply,Server}.
 
-%% returns a tuple {server,pid,table}
+handle_call({search,Table},_From,Server)->
+    Test = ets:lookup(Server#server.table,Table),
+    {reply,Test,Server};
+
+%% returns the pid
 handle_call(get_record,_From,Server) ->
     {reply,Server#server.pid,Server};
 
