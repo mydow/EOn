@@ -9,7 +9,7 @@
 
 -export([start/0,insert/1,insertlist/1,close/1,remove/1,
 	 print_record/0,get_record/0,save/1,save_as/1,
-	 load/1,import/1]).
+	 load/1,import/1,new/1]).
 
 -export([file2list/1,remove_last/2,autosave/1]).
 
@@ -20,9 +20,12 @@ init([]) ->
     %% duplicate_bag to allows duplicate keys and values
     Table = ets:new(table,[duplicate_bag]),
     Server = #server{pid = self(),table = Table},
-	%%autosave(Server),
-	spawn(?MODULE,autosave,[Server]),
+    %%autosave(Server),
+    %%spawn(?MODULE,autosave,[Server]),
     {ok,Server}.
+
+new(Filename)->
+    gen_server:cast(?MODULE,{new,Filename}).
 
 insert(Object)->
     gen_server:cast(?MODULE,{insert,Object}).
@@ -57,6 +60,11 @@ print_record()->
 %% helper functions end
 
 %% server functions
+
+handle_cast({new,Filename},Server)->
+    Newtable = ets:new(newtable,[duplicate_bag]),
+    Newserver = Server#server{table = Newtable, filename = Filename},
+    {noreply,Newserver};
 
 %% Object should be on the form
 %% {table,key,value} where table is which table, key is the roll of the dice
