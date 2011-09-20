@@ -9,7 +9,7 @@
 
 -export([start/0,insert/1,insertlist/1,close/1,remove/1,
 	 print_record/0,get_record/0,save/1,save_as/1,
-	 load/1,import/1,new/1,search/1]).
+	 load/1,import/1,new/1,search/1,lookup_strid/3]).
 
 -export([file2list/1,remove_last/2,autosave/1]).
 
@@ -38,6 +38,10 @@ remove(Object)->
 
 search(Table)->
     gen_server:call(?MODULE,{search,Table}).
+
+%% D1 = träff område, D2 = delområde, D3 = skada
+lookup_strid(D1,D2,D3) ->
+    gen_server:call(?MODULE,{lookup_strid,D1,D2,D3}).
 
 save(Filename)->
     gen_server:cast(?MODULE,{save,Filename}).
@@ -121,6 +125,33 @@ handle_cast({print_record},Server) ->
 
 handle_call({search,Table},_From,Server)->
     Test = ets:lookup(Server#server.table,Table),
+    {reply,Test,Server};
+
+handle_call({lookup_strid,D1,D2,D3},_From,Server)->
+    if
+	D1<10 ->
+	    if
+		D2<4->
+		    Test = {huvud,skalle};
+		D2<7->
+		    Test = {huvud,hals};
+		D2<10->
+		    Test = {huvud,ansikte}
+	    end;
+	D1<20 ->
+	    Test = bröst;
+	D1<30 ->
+	    Test = bål;
+	D1<40 ->
+	    Test = 'höger arm';
+	D1<50 ->
+	    Test = 'vänster arm';
+	D1<60 ->
+	    Test = 'Höger ben';
+	D1<70 ->
+	    Test = 'vänster ben'
+    end,
+    %% ladda korrekt tabel
     {reply,Test,Server};
 
 %% returns the pid
