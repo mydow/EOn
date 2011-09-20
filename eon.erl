@@ -132,27 +132,45 @@ handle_call({lookup_strid,D1,D2,D3},_From,Server)->
 	D1<10 ->
 	    if
 		D2<4->
-		    Test = {huvud,skalle};
+		    Result = {huvud,skalle};
 		D2<7->
-		    Test = {huvud,hals};
+		    Result = {huvud,hals};
 		D2<10->
-		    Test = {huvud,ansikte}
+		    Result = {huvud,ansikte}
 	    end;
 	D1<20 ->
-	    Test = bröst;
+	    Result = bröst;
 	D1<30 ->
-	    Test = bål;
+	    Result = bål;
 	D1<40 ->
-	    Test = 'höger arm';
+	    if
+		D2<2->
+		    Result = {'höger arm',axel};
+		D2<4->
+		    Result = {'Höger arm',överarm};
+		D2<6->
+		    Result = {'höger arm',underarm};
+		D2<10->
+		    Result = {'höger arm',hand}
+	    end;
 	D1<50 ->
-	    Test = 'vänster arm';
+	    if
+	    	D2<2->
+		    Result = {'vänster arm',axel};
+		D2<4->
+		    Result = {'vänster arm',överarm};
+		D2<6->
+		    Result = {'vänster arm',underarm};
+		D2<10->
+		    Result = {'vänster arm',hand}
+	      end;
 	D1<60 ->
-	    Test = 'Höger ben';
+	    Result = 'Höger ben';
 	D1<70 ->
-	    Test = 'vänster ben'
+	    Result = 'vänster ben'
     end,
     %% ladda korrekt tabel
-    {reply,Test,Server};
+    {reply,Result,Server};
 
 %% returns the pid
 handle_call(get_record,_From,Server) ->
