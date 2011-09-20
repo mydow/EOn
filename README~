@@ -1,0 +1,15 @@
+all Eon tables
+
+eon.erl används för att skapa olicka tabeller samt spara och ladda befintliga
+tabeller.
+
+strid.erl används för strid, här laddas träff och skade tabeller samt
+funktioner för att söka i dessa.
+
+<<<<<<< HEAD
+karaktär.erl här finns alla tabeller för att skapa en karaktär.
+=======
+karaktär.erl här finns alla tabeller för att skapa en karaktär.
+
+.gitignore innehåller excluderade filer
+>>>>>>> 87254ac7fccbe57ac330d502dc3dd4a17b3e9152
