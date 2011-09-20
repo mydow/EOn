@@ -129,45 +129,76 @@ handle_call({search,Table},_From,Server)->
 
 handle_call({lookup_strid,D1,D2,D3},_From,Server)->
     if
-	D1<10 ->
+	D1<20 ->
 	    if
 		D2<4->
 		    Result = {huvud,skalle};
-		D2<7->
+		D2<8->
 		    Result = {huvud,hals};
 		D2<10->
 		    Result = {huvud,ansikte}
 	    end;
-	D1<20 ->
-	    Result = bröst;
-	D1<30 ->
-	    Result = bål;
 	D1<40 ->
 	    if
 		D2<2->
-		    Result = {'höger arm',axel};
+		    Result = {'vänster arm',skuldra};
 		D2<4->
-		    Result = {'Höger arm',överarm};
-		D2<6->
+		    Result = {'vänster arm',överarm};
+		D2 == 5 ->
+		    Result = {'vänster arm',armbåge};
+		D2<8->
+		    Result = {'vnster arm',underarm};
+		D2<10->
+		    Result = {'vänster arm',hand}
+	    end;
+	D1<60 ->
+	    if
+	    	D2<2->
+		    Result = {'höger arm',skuldra};
+		D2<4->
+		    Result = {'höger arm',överarm};
+		D2 == 5 ->
+		    Result = {'höger arm',armbåge};
+		D2<8->
 		    Result = {'höger arm',underarm};
 		D2<10->
 		    Result = {'höger arm',hand}
-	    end;
-	D1<50 ->
-	    if
-	    	D2<2->
-		    Result = {'vänster arm',axel};
-		D2<4->
-		    Result = {'vänster arm',överarm};
-		D2<6->
-		    Result = {'vänster arm',underarm};
-		D2<10->
-		    Result = {'vänster arm',hand}
 	      end;
-	D1<60 ->
-	    Result = 'Höger ben';
 	D1<70 ->
-	    Result = 'vänster ben'
+	    Result = bröstkorg;
+	D1<80 ->
+	    if
+		D2<8->
+		    Result = {buk,mage};
+		D2<10->
+		    Result = {buk,underliv}
+	    end;
+	D1<90 ->
+	    if
+		D2<2->
+		    Result = {'vänster ben',höft};
+		D2<4->
+		    Result = {'vänster ben',lår};
+		D2<6->
+		    Result = {'vänster ben',knä};
+		D2<9->
+		    Result = {'vänster ben',vad};
+		D2 == 10 ->
+		    Result = {'vänster ben',fot}
+	    end;
+	D1<100 ->
+	      if
+		D2<2->
+		    Result = {'höger ben',höft};
+		D2<4->
+		    Result = {'höger ben',lår};
+		D2<6->
+		    Result = {'höger ben',knä};
+		D2<9->
+		    Result = {'höger ben',vad};
+		D2 == 10 ->
+		    Result = {'höger ben',fot}
+	    end
     end,
     %% ladda korrekt tabel
     {reply,Result,Server};
